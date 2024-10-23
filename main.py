@@ -2,18 +2,19 @@ import time
 
 import cv2
 
-from cameraservice import CameraService, WindowsCameraService
+from cameraservice import WindowsCameraService
 from memoryService import MemoryService
-
-
 from yoloservice import YoloService
+from fsmservice import FsmService
 
 cameraService = WindowsCameraService()
 yoloService = YoloService()
 memoryService = MemoryService(yoloService)
+fsmService = FsmService(memoryService)
 
-target_fps = 10
+target_fps = 8
 frame_delay = 1 / target_fps
+show_preview = True
 
 cameraService.start()
 
@@ -23,10 +24,11 @@ while True:
     photo = cameraService.get_photo()
     results = yoloService.analyze_photo(photo)
     memoryService.remember(results)
+    fsmService.think()
 
-    annotated_frame = results[0].plot()
-
-    cv2.imshow("Camera", annotated_frame)
+    if show_preview:
+        annotated_frame = results[0].plot()
+        cv2.imshow("Camera", annotated_frame)
 
     elapsed_time = time.time() - start_time
     sleep_time = frame_delay - elapsed_time
