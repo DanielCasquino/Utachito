@@ -1,6 +1,14 @@
+class Moment:
+    def __init__(self, frame, timestamp, objects):
+        self.frame = frame  # image
+        self.timestamp = timestamp  # time at which the frame was captured
+        self.objects = objects  # key = object, suspicion level = value
+
+
 class MemoryService:
     def __init__(self, yoloService):
         self.yoloService = yoloService
+        self.last_moment = None
         self.memory = {}
         self.increment = 6
         self.confidence_threshold = 0.6
@@ -8,7 +16,7 @@ class MemoryService:
         self.forgetting_threshold = 0.46
         self.max = 100.0
 
-    def remember(self, results):
+    def remember(self, results, frame, timestamp):
         detected_objects = set()
         for result in results:
             for obj in result.boxes.data:
@@ -38,3 +46,5 @@ class MemoryService:
 
         for class_name, level in self.memory.items():
             print(f"History level for {class_name}: {level:.2f}")
+
+        self.last_moment = Moment(frame, timestamp, self.memory)

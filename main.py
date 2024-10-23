@@ -23,7 +23,7 @@ while True:
 
     photo = cameraService.get_photo()
     results = yoloService.analyze_photo(photo)
-    memoryService.remember(results)
+    memoryService.remember(results, photo, start_time)
     fsmService.think()
 
     if show_preview:

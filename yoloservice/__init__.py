@@ -26,5 +26,5 @@ class YoloService:
         self.model = YOLO(self.model_folder, task="detect")
 
     def analyze_photo(self, photo):
-        results = self.model(photo)
+        results = self.model.predict(photo, conf=0.6)
         return results
