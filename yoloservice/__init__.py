@@ -7,7 +7,7 @@ class YoloService:
     def __init__(self):
         self.model = None
         # self.model_folder = "yolo11n_ncnn_model"
-        self.model_folder = "utec11n_ncnn_model"
+        self.model_folder = "disrupton_v1_ncnn_model"
         self.load_or_create_model()
 
     def load_or_create_model(self):
