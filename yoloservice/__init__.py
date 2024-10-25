@@ -7,7 +7,7 @@ class YoloService:
     def __init__(self):
         self.model = None
         # self.model_folder = "yolo11n_ncnn_model"
-        self.model_folder = "disrupton_v1_ncnn_model"
+        self.model_folder = "disrupton_plus_v2_ncnn_model"
         self.load_or_create_model()
 
     def load_or_create_model(self):
@@ -19,12 +19,12 @@ class YoloService:
 
     def create_model(self):
         # model = YOLO("yolo11n.pt", task="detect")
-        model = YOLO("utec11n.pt", task="detect")
+        model = YOLO("roboflow_models/best.pt", task="detect")
         model.export(format="ncnn")
 
     def load_model(self):
         self.model = YOLO(self.model_folder, task="detect")
 
     def analyze_photo(self, photo):
-        results = self.model.predict(photo, conf=0.6)
+        results = self.model.predict(photo, conf=0.4)
         return results
