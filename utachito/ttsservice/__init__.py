@@ -9,6 +9,7 @@ import os
 from pydub import AudioSegment
 from pydub.playback import play
 
+
 class TTSService:
     def __init__(self):
         self.user_id = os.getenv("PLAY_HT_USER_ID")
@@ -18,7 +19,6 @@ class TTSService:
         self.language = Language.SPANISH
         self.speed = 0.9
 
-
     def save_audio(self, data: Generator[bytes, None, None] | Iterable[bytes]):
         chunks: bytearray = bytearray()
         for chunk in data:
@@ -27,15 +27,19 @@ class TTSService:
             f.write(chunks)
 
     def play_saved_audio(self):
-        audio = AudioSegment.from_wav("utachito.wav")
-        play(audio)
-
+        path = os.getcwd() + "/utachito.wav"
+        print(path)
+        os.system(f"vlc -I dummy --dummy-quiet --play-and-exit {path}")
 
     def generate_audio(self, text: Iterable[str]):
-        options = TTSOptions(voice=self.voice, language=Language(self.language), speed=self.speed)
+        options = TTSOptions(
+            voice=self.voice, language=Language(self.language), speed=self.speed
+        )
 
         voice_engine = "Play3.0-mini-http"
-        in_stream, out_stream = self.client.get_stream_pair(options, voice_engine=voice_engine)
+        in_stream, out_stream = self.client.get_stream_pair(
+            options, voice_engine=voice_engine
+        )
 
         audio_thread = threading.Thread(None, self.save_audio, args=(out_stream,))
         audio_thread.start()
