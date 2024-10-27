@@ -1,18 +1,16 @@
-import random
 import time
 
+from utachito.chatgptservice import ChatGPTService
+from utachito.ttsservice import TTSService
 
 class FsmService:
     def __init__(self, memoryService):
+        self.chat_gpt_service = ChatGPTService()
         self.memoryService = memoryService
         self.min_suspicion = float(0.00)
         self.timer = 0
         self.timer_threshold = 10
-        self.preset_messages = {
-            "plasticbottles": [
-                "Hola! Veo que tienes botellas de plástico. Si ya no vas a usarlas, puedes ponerlas en el tacho para plásticos.",
-            ],
-        }
+        self.tts_service = TTSService()
 
     def think(self):
         has_bottles = False
@@ -22,8 +20,7 @@ class FsmService:
             has_bottles = res > self.min_suspicion
         if has_bottles and self.timer >= self.timer_threshold:
             self.timer = 0
-            message = self.generate_message("plasticbottles")
-            print(f"Generated response: {message}")
+            self.generate_message("plasticbottles")
 
         self.timer += time.time() - getattr(self, "last_time", time.time())
         self.last_time = time.time()
@@ -33,7 +30,7 @@ class FsmService:
         print(self.timer)
 
     def generate_message(self, object_class):
-        messages = self.preset_messages.get(object_class, [])
-        if messages:
-            return random.choice(messages)
-        return "No message available :("
+        text = self.chat_gpt_service.get_message_for_student(object_class)
+        self.tts_service.generate_audio([text])
+        self.tts_service.play_saved_audio()
+        

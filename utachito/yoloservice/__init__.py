@@ -2,12 +2,15 @@ import os
 
 from ultralytics import YOLO
 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class YoloService:
     def __init__(self):
         self.model = None
         # self.model_folder = "yolo11n_ncnn_model"
-        self.model_folder = "disrupton_plus_v2_ncnn_model"
+        self.model_folder = "./models/disrupton_plus_v2_ncnn_model"
         self.load_or_create_model()
 
     def load_or_create_model(self):
@@ -19,7 +22,7 @@ class YoloService:
 
     def create_model(self):
         # model = YOLO("yolo11n.pt", task="detect")
-        model = YOLO("roboflow_models/best.pt", task="detect")
+        model = YOLO("./models/roboflow_models/best.pt", task="detect")
         model.export(format="ncnn")
 
     def load_model(self):

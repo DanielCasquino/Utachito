@@ -2,10 +2,12 @@ import time
 
 import cv2
 
-from cameraservice import WindowsCameraService
-from memoryService import MemoryService
-from yoloservice import YoloService
-from fsmservice import FsmService
+from utachito import (
+    WindowsCameraService,
+    YoloService,
+    MemoryService,
+    FsmService,
+)
 
 cameraService = WindowsCameraService()
 yoloService = YoloService()

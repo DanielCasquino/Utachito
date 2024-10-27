@@ -10,3 +10,7 @@ Create a virtual environment with the system packages flag, like so:
 ## Windows Setup
 
 Create a virtual environment, and install the required packages found in `requirements.txt`
+
+## Usage
+
+Create a `.env` file containing your `OPENAI_API_KEY`, `PLAY_HT_USER_ID`, and `PLAY_HT_API_KEY`. Then just run the main.py and it should work.
