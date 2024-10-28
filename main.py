@@ -26,7 +26,7 @@ while True:
     photo = cameraService.get_photo()
     results = yoloService.analyze_photo(photo)
     memoryService.remember(results, photo, start_time)
-    fsmService.think()
+    fsmService.think(photo)
 
     if show_preview:
         annotated_frame = results[0].plot()
