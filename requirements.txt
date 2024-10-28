@@ -4,3 +4,4 @@ opencv-python
 openai
 pyht
 pydub
+python-dotenv
