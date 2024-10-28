@@ -2,6 +2,7 @@ import time
 
 from utachito.chatgptservice import ChatGPTService
 from utachito.ttsservice import TTSService
+from utachito.lightservice import LightService
 from utachito.awsservice import recognize
 
 
@@ -13,6 +14,7 @@ class FsmService:
         self.timer = 0
         self.timer_threshold = 15
         self.tts_service = TTSService()
+        self.light_service = LightService()
 
     def think(self, photo):
         """
@@ -44,4 +46,6 @@ class FsmService:
 
         text = self.chat_gpt_service.get_message_for_student(message)
         self.tts_service.generate_audio([text])
+        self.light_service.turn_on(object_class)
         self.tts_service.play_saved_audio()
+        self.light_service.turn_off(object_class)
