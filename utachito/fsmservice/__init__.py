@@ -9,7 +9,7 @@ class FsmService:
         self.memoryService = memoryService
         self.min_suspicion = float(0.00)
         self.timer = 0
-        self.timer_threshold = 10
+        self.timer_threshold = 15
         self.tts_service = TTSService()
 
     def think(self):
