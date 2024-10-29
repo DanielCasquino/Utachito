@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class YoloService:
     def __init__(self):
         self.model = None
@@ -29,5 +30,17 @@ class YoloService:
         self.model = YOLO(self.model_folder, task="detect")
 
     def analyze_photo(self, photo):
-        results = self.model.predict(photo, conf=0.4)
+        results = self.model.predict(
+            source=photo,
+            conf=0.4,
+            half=True,
+            iou=0.4,
+            agnostic_nms=True,
+            verbose=False,
+            vid_stride=2,
+            augment=True,
+            # stream=True, # doesnt allow fsm to run in parallel for some reason
+            show=True,
+        )
+        # print(results)
         return results

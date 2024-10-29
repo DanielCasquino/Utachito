@@ -32,7 +32,7 @@ def recognize(image_matrix, waste="botella", amount=1):
     body = response.json()
     # print(body)
     if body["statusCode"] == 500:
-        message = f"Soy un estudiante que falta registrarse. Tengo una {waste}"
+        message = f"Soy un estudiante que falta registrarse. Tengo una cantidad {amount} de {waste}"
     else:
         message = body["body"]["message"]
 

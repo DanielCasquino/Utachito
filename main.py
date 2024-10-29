@@ -3,20 +3,20 @@ import time
 import cv2
 
 from utachito import (
-    CameraService,
+    WindowsCameraService,
     YoloService,
     MemoryService,
     FsmService,
 )
 
-cameraService = CameraService()
+cameraService = WindowsCameraService()
 yoloService = YoloService()
 memoryService = MemoryService(yoloService)
 fsmService = FsmService(memoryService)
 
 target_fps = 8
 frame_delay = 1 / target_fps
-show_preview = False
+show_preview = True
 
 cameraService.start()
 
@@ -28,9 +28,9 @@ while True:
     memoryService.remember(results, photo, start_time)
     fsmService.think(photo)
 
-    if show_preview:
-        annotated_frame = results[0].plot()
-        cv2.imshow("Camera", annotated_frame)
+    # if show_preview:
+    #     annotated_frame = results[0].plot()
+    #     cv2.imshow("Camera", annotated_frame)
 
     elapsed_time = time.time() - start_time
     sleep_time = frame_delay - elapsed_time
