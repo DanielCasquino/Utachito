@@ -5,4 +5,3 @@ openai
 pyht
 pydub
 python-dotenv
-gpiod

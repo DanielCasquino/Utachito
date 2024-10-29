@@ -3,20 +3,20 @@ import time
 import cv2
 
 from utachito import (
-    WindowsCameraService,
+    CameraService,
     YoloService,
     MemoryService,
     FsmService,
 )
 
-cameraService = WindowsCameraService()
+cameraService = CameraService()
 yoloService = YoloService()
 memoryService = MemoryService(yoloService)
 fsmService = FsmService(memoryService)
 
 target_fps = 8
 frame_delay = 1 / target_fps
-show_preview = True
+show_preview = False
 
 cameraService.start()
 

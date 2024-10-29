@@ -29,7 +29,7 @@ class TTSService:
     def play_saved_audio(self):
         path = os.getcwd() + "/utachito.wav"
         print(path)
-        os.system(f"vlc -I dummy --dummy-quiet --play-and-exit {path}")
+        os.system(f"vlc -I dummy -q --play-and-exit {path}")
 
     def generate_audio(self, text: Iterable[str]):
         options = TTSOptions(
