@@ -10,10 +10,10 @@ class MemoryService:
         self.yoloService = yoloService
         # self.last_moment = None
         self.memory = {}
-        self.increment = 6
-        self.confidence_threshold = 0.4
-        self.decrement = 4
-        self.forgetting_threshold = 0.35
+        self.increment = 10
+        self.confidence_threshold = 0.6
+        self.decrement = 3
+        self.forgetting_threshold = 0.44
         self.max = 100.0
 
     def remember(self, results, frame, timestamp):
@@ -39,7 +39,7 @@ class MemoryService:
                     )
                 elif confidence < self.forgetting_threshold:
                     self.memory[class_name][0] = max(
-                        0.0, self.memory[class_name][0] - self.decrement * confidence
+                        0.0, self.memory[class_name][0] - self.decrement
                     )
 
             for class_name in list(self.memory.keys()):

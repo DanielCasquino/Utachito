@@ -3,7 +3,7 @@ import time
 from utachito.chatgptservice import ChatGPTService
 from utachito.ttsservice import TTSService
 
-# from utachito.lightservice import LightService
+from utachito.lightservice import LightService
 from utachito.awsservice import recognize
 
 
@@ -13,12 +13,12 @@ class FsmService:
         self.memoryService = memoryService
         self.min_suspicion = float(30.0)
         self.timer = 0
-        self.timer_threshold = 14
+        self.timer_threshold = 16
         self.tts_service = TTSService()
-        # self.light_service = LightService()
+        self.light_service = LightService()
         self.run_timer = True
 
-    def think(self, photo):
+    def think(self, photo, elapsed_time):
         """
         The photo is a numpy matrix of 3 dimensions representing a image
         """
@@ -27,19 +27,21 @@ class FsmService:
 
         if res is not None:
             has_bottles = res[0] > self.min_suspicion
-        if self.run_timer and has_bottles and self.timer >= self.timer_threshold:
-            self.run_timer = False
+        if self.run_timer and has_bottles:
             self.timer = 0
+            self.run_timer = False
+            
+            self.timer_threshold = elapsed_time * 50
             self.generate_message(
                 photo, "plasticbottles", res[1]
             )  # res[1] is the count of plastic bottles
 
-        if self.run_timer:
-            self.timer += time.time() - getattr(self, "last_time", time.time())
-            self.last_time = time.time()
+        self.timer += time.time() - getattr(self, "last_time", time.time())
+        self.last_time = time.time()
 
-        if self.timer > self.timer_threshold:
+        if self.run_timer is False and self.timer > self.timer_threshold:
             self.timer = self.timer_threshold
+            self.run_timer = True
 
         print("FSM timer: ", self.timer)
 
@@ -53,8 +55,8 @@ class FsmService:
         message = recognize(photo, object_class_to_spanish[object_class], amount)
         text = self.chat_gpt_service.get_message_for_student(message)
         self.tts_service.generate_audio([text])
-        # self.light_service.turn_on(object_class)
+        self.light_service.turn_on(object_class)
         self.tts_service.play_saved_audio()
-        # self.light_service.turn_off(object_class)
+        self.light_service.turn_off(object_class)
         # self.run_timer = True
         # solo corre una vez por ahora si no lo ponemos en true
